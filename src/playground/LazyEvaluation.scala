@@ -1,7 +1,5 @@
 package playground
 
-import java.util.concurrent.TimeUnit
-
 object LazyEvaluation extends App {
   lazy val x: Int = {
     println("print only once")
