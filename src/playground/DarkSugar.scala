@@ -11,7 +11,7 @@ object DarkSugar extends App{
   //scala spec: last char decides associativity of a method (colon means right)
   //example
   case class MyStream[T](){
-    def -->:(value:T) : MyStream[T] = this
+    def -->: (value:T) : MyStream[T] = this
   }
   val myStream= 1-->:2-->: 3-->: MyStream[Int]()
 
