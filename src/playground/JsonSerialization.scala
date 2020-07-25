@@ -65,16 +65,20 @@ object JsonSerialization extends App{
       "createdAt" → JsonString(post.createdAt.toString)
     ))
   }
-  implicit object FeedConverter extends JsonConverter[Feed]{
-    override def convert(feed: Feed): JsonValue = JsonObject(Map(
-      "user" → UserConverter.convert(feed.user),
-      "posts"→ JsonArray(feed.posts.map(post ⇒ PostConverter.convert(post)))
-    ))
-  }
+
   // 3. serialize to JSON
   implicit class JsonEnrichment[T](value:T){
     def toJson(implicit jsonConverter: JsonConverter[T]): JsonValue = jsonConverter.convert(value)
   }
+
+
+  implicit object FeedConverter extends JsonConverter[Feed]{
+    override def convert(feed: Feed): JsonValue = JsonObject(Map(
+      "user" → feed.user.toJson,
+      "posts"→ JsonArray(feed.posts.map(post ⇒ post.toJson))
+    ))
+  }
+
 
   /* Example:
   val now = new Date(System.currentTimeMillis())
