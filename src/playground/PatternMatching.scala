@@ -10,10 +10,10 @@ package playground
  */
 object PatternMatching extends App {
   val numbers= List(1)
-  val firstNumber = numbers match {
-    case head ::Nil ⇒ head
-  }
-  println(firstNumber+5)
+//  val firstNumber = numbers match {
+//    case head ::Nil ⇒ head
+//  }
+//  println(firstNumber+5)
 
   //decompose classes that cannot be data class
   class Person(val name:String,val age:Int)
