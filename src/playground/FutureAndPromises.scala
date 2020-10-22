@@ -70,7 +70,7 @@ object FutureAndPromises extends App {
   println(BankingApp
     .purchase("Aviad", "27InchMonitor", "Hightech-Zone", cost = 3000)) //SUCCESS
 
-  //promises
+  //promises - think of a promise like a controller over a future, which you can write a result to a future
   val promise = Promise[Int]()
   val future = promise.future
   //consumer
@@ -96,6 +96,10 @@ object FutureAndPromises extends App {
 
     def completeFirst(fb: Future[A]): Future[A] = {
       val promise = Promise[A]
+      /**
+       * because a promise can only write once, the second try will throw an exception,
+       * to silently ignore the second time we call tryComplete and propagate first the success result
+       */
       fa.onComplete(promise.tryComplete)
       fb.onComplete(promise.tryComplete)
 
@@ -118,7 +122,19 @@ object FutureAndPromises extends App {
 
     def retryUntil[A](action: () ⇒ Future[A],condition: A⇒ Boolean): Future[A] ={
       action().filter(condition).recoverWith{
-        case _ ⇒ retryUntil(action,condition)
+        case _ ⇒ retryUntil(action,condition) //not a real recursion https://stackoverflow.com/questions/16973838/how-do-i-make-a-function-involving-futures-tail-recursive
+        /*
+        stated it is because every call is being executed on another thread and this is why that not really recursive call.
+        but then I asked myself, what will happen if that was single threaded? will this break it?
+        I tested it and saw the answer is no.
+        and I think the reason is - even if the
+        executor is single threaded,
+          all Future computations and their callbacks
+          (e.g. functions for map, flatMap, onComplete etc)
+          are scheduled to run on this executor.
+          There is no growing stack because the next “recursive” call will be run when the future argument completes,
+          as a scheduled action (Java Callable IIRC). So there’s no true recursion going on here.
+         */
       }
     }
   }
