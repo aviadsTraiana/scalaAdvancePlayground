@@ -1,3 +1,5 @@
+import Calculator.expPattern
+
 import java.lang.Character.isDigit
 
 
@@ -8,11 +10,11 @@ object Calculator {
 
   private val expPattern =  raw"((\d+)(\+|\*)(\d+))*((\*|\+)(\d))?".r
 
-  def validate(exp:String) :Either[Error,String] =
-    expPattern.findAllIn(exp).toList.headOption match {
-      case Some(_) => Right(exp)
-      case None => Left(Error("invalid expression"))
-    }
+  def validate(exp:String) :Either[Error,String] = {
+    val results = expPattern.findAllIn(exp).toList
+    if(results.size == 1) Right(exp)
+    else Left(Error("invalid expression"))
+  }
 
   sealed trait Token
   final case class Operator(char: Char) extends Token {
