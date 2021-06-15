@@ -1,4 +1,3 @@
-import Calculator.expPattern
 
 import java.lang.Character.isDigit
 
@@ -6,9 +5,9 @@ import java.lang.Character.isDigit
 object Calculator {
   final case class Error(m:String) extends AnyVal
   def apply(exp: String) :Either[Error,Int] =
-    validate(exp).map(createTokens).map(calcTokens)
+    validate(exp).map(createTokens).flatMap(calcTokens)
 
-  private val expPattern =  raw"((\d+)(\+|\*)(\d+))*((\*|\+)(\d))?".r
+  private val expPattern =  raw"((\d+)(\+|\*)(\d+))+((\*|\+)(\d))?".r
 
   def validate(exp:String) :Either[Error,String] = {
     val results = expPattern.findAllIn(exp).toList
@@ -25,7 +24,7 @@ object Calculator {
   }
   final case class Number(value: Int) extends Token
 
-  def calcTokens(tokens: Vector[Token]): Int = {
+  def calcTokens(tokens: Vector[Token]): Either[Error,Int] = {
     var transformedTokens = tokens
     def calcOp(op: Char): Unit = {
       var i = 0
@@ -44,7 +43,10 @@ object Calculator {
     }
     calcOp('*')
     calcOp('+')
-    transformedTokens.head.asInstanceOf[Number].value
+    transformedTokens.head match {
+      case Number(x) => Right(x)
+      case _ => Left(Error("Calculator fail to evaluate final result"))
+    }
   }
   def createTokens(exp: String): Vector[Token] = {
     var i = 0
