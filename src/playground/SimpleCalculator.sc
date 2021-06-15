@@ -67,7 +67,7 @@ object Calculator {
   }
 }
 
-val exp = ""//"12+2*3+5*2"
+val exp = "12+2*3+5*2"
 Calculator(exp)
 
 
