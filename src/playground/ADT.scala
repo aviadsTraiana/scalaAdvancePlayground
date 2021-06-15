@@ -2,10 +2,6 @@ package playground
 
 import java.time.ZonedDateTime
 
-import playground.ADT.Filter.{InStock, Price}
-import playground.ADT.filterValues
-import sun.security.krb5.internal.crypto.Nonce.value
-
 
 object ADT extends App {
 
@@ -13,7 +9,6 @@ object ADT extends App {
   object Filter {
 
       final case class Date(value: ZonedDateTime) extends Filter
-
       final case class Category(value: Int) extends Filter
 
       final case class InStock(value: Boolean) extends Filter
@@ -22,12 +17,12 @@ object ADT extends App {
 
   }
 
-    def filterValues(filter: Filter) : String = filter match {
+    /*def filterValues(filter: Filter) : String = filter match {
         case Filter.Date(value) => "1"
         case Filter.Category(value) =>"2"
         case Price(from, to) =>"4"
     }
-    println(filterValues(Price(1,2)))
+    println(filterValues(Price(1,2)))*/
 
 
 

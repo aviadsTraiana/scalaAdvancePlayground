@@ -1,3 +1,5 @@
+
+
 val x= Seq(1,2,3,4,5)
 val f= (x:Int) => "Number "+ x
 
@@ -10,3 +12,13 @@ format(x)(f)
 val dataFilled =format(x) _
 //... (later on that program)
 dataFilled(f)
+
+object MathExample {
+
+    implicit class IntOps(x: Int) {
+        def *^* (y: Int): Long = math.pow(x, y).toLong
+    }
+
+}
+import MathExample.IntOps
+val y = 2 *^* 5
