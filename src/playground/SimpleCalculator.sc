@@ -5,15 +5,17 @@ import java.lang.Character.isDigit
 object Calculator {
   final case class Error(m:String) extends AnyVal
   def apply(exp: String) :Either[Error,Int] =
-    validate(exp).map(createTokens).map(calcTokens)
+    validate(exp.trim).map(createTokens).map(calcTokens)
 
   private val expPattern =  raw"((\d+)(\+|\*)(\d+))*((\*|\+)(\d))?".r
 
-  def validate(exp:String) :Either[Error,String] =
-    expPattern.findAllIn(exp).toList.headOption match {
+  def validate(exp:String) :Either[Error,String] = {
+    if(exp.isEmpty) Left(Error("invalid expression, cannot be empty String"))
+    else expPattern.findAllIn(exp).toList.headOption match {
       case Some(_) => Right(exp)
       case None => Left(Error("invalid expression"))
     }
+  }
 
   sealed trait Token
   final case class Operator(char: Char) extends Token {
@@ -65,7 +67,7 @@ object Calculator {
   }
 }
 
-val exp = "12+2*3+5*2"
+val exp = ""//"12+2*3+5*2"
 Calculator(exp)
 
 
