@@ -80,7 +80,7 @@ object JsonSerialization extends App{
   }
 
 
-  /* Example:
+  // Example:
   val now = new Date(System.currentTimeMillis())
   val aviad= User("aviad",30,"aviadshiber@gmail.com")
   val feed= Feed(aviad,List(
@@ -89,6 +89,6 @@ object JsonSerialization extends App{
   ))
   println(feed.toJson.stringify)
 
-   */
+
 
 }
